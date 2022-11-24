@@ -1,0 +1,35 @@
+version: '3'
+services:
+  app:
+    build:
+      args: 
+        APP_DOCUMENT_ROOT: /var/www/html/exampws/public
+      context: ./build/exampws
+    image: iutlr-info-apache-symfony5-exampws
+    container_name: iutlr-info2-projet-exampws
+    ports:
+      - 9999:80
+    volumes:
+      - ./exampws:/var/www/html/exampws:delegated  
+    networks:
+      - exampws-network
+  mysql:
+    build:
+      context: build/mysql
+    image: iutlr-info-mysql-exampws
+    container_name: iutlr-info2-mysql-exampws
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql:delegated
+    environment:
+      MYSQL_DATABASE: db-exampws
+      MYSQL_USER: exampws
+      MYSQL_PASSWORD: exampws
+      MYSQL_ROOT_PASSWORD: exampws
+    networks:
+      - exampws-network
+networks:
+  exampws-network:
+    driver: bridge
+
